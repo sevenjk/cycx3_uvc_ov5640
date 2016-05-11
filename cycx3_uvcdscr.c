@@ -302,7 +302,7 @@ const uint8_t CyCx3USBSSConfigDscr[] =
     0x80, 0x00, 0x00, 0xAA,
     0x00, 0x38, 0x9B, 0x71,
     0x10,                               /* Number of bits per pixel: 16*/
-    0x01,                               /* Optimum Frame Index for this stream: 2 (1080p) */
+    0x04,                               /* Optimum Frame Index for this stream: 2 (1080p) */
     0x00,                               /* X dimension of the picture aspect ratio; Non-interlaced */
     0x00,                               /* Y dimension of the pictuer aspect ratio: Non-interlaced */
     0x00,                               /* Interlace Flags: Progressive scanning, no interlace */
@@ -1185,19 +1185,35 @@ CyU3PMipicsiCfg_t cfgUvc720p60NoMclk =  {
     0x01                       /* fifoDelay    */
 };
 
+///* Configuration parameters for VGA for the OV5640 sensor */
+//CyU3PMipicsiCfg_t cfgUvcVgaNoMclk =  {
+//    CY_U3P_CSI_DF_YUV422_8_2,       /* dataFormat   */
+//    1,                            /* numDataLanes */
+//    0x1,                          /* pllPrd       */
+//    90,                           /* pllFbd       */
+//    CY_U3P_CSI_PLL_FRS_125_250M,   /* pllFrs      */
+//    CY_U3P_CSI_PLL_CLK_DIV_2,     /* csiRxClkDiv  */
+//    CY_U3P_CSI_PLL_CLK_DIV_8,     /* parClkDiv    */
+//    0x00,                         /* mclkCtl      */
+//    CY_U3P_CSI_PLL_CLK_DIV_8,     /* mClkRefDiv   */
+//    640,                          /* hResolution  */
+//    0x01                          /* fifoDelay    */
+//};
+
+
 /* Configuration parameters for VGA for the OV5640 sensor */
-CyU3PMipicsiCfg_t cfgUvcVgaNoMclk =  { 
-    CY_U3P_CSI_DF_YUV422_8_2,       /* dataFormat   */    
-    1,                            /* numDataLanes */    
-    0x1,                          /* pllPrd       */    
-    90,                           /* pllFbd       */    
-    CY_U3P_CSI_PLL_FRS_125_250M,   /* pllFrs      */            
-    CY_U3P_CSI_PLL_CLK_DIV_2,     /* csiRxClkDiv  */    
-    CY_U3P_CSI_PLL_CLK_DIV_8,     /* parClkDiv    */    
-    0x00,                         /* mclkCtl      */    
-    CY_U3P_CSI_PLL_CLK_DIV_8,     /* mClkRefDiv   */    
-    640,                          /* hResolution  */    
-    0x01                          /* fifoDelay    */    
+CyU3PMipicsiCfg_t cfgUvcVgaNoMclk =  {
+		CY_U3P_CSI_DF_YUV422_8_2,  /* CyU3PMipicsiDataFormat_t dataFormat */
+		4,                          /* uint8_t numDataLanes */
+		2,							/* uint8_t pllPrd */
+		89,							/* uint16_t pllFbd */
+		CY_U3P_CSI_PLL_FRS_250_500M, /* CyU3PMipicsiPllClkFrs_t pllFrs */
+		CY_U3P_CSI_PLL_CLK_DIV_4,	/* CyU3PMipicsiPllClkDiv_t csiRxClkDiv */
+		CY_U3P_CSI_PLL_CLK_DIV_4,	/* CyU3PMipicsiPllClkDiv_t parClkDiv */
+		0,		                /* uint16_t mClkCtl */
+		CY_U3P_CSI_PLL_CLK_DIV_2,	/* CyU3PMipicsiPllClkDiv_t mClkRefDiv */
+		640,		        /* uint16_t hResolution */
+		50	                        /* uint16_t fifoDelay */
 };
 
 /* [ ] */

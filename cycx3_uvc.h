@@ -37,7 +37,7 @@
 #define STILL_CAPTURE_ENABLE                    (1)
 
 /* Uncomment the following line to provide verbose debug logging. */
-/* #define CX3_DEBUG_ENABLED                    (1) */
+#define CX3_DEBUG_ENABLED                    (1)
         
 /* Uncomment the following line to run the mipi error thread */
 /* #define CX3_ERROR_THREAD_ENABLE              (1) */
@@ -87,7 +87,7 @@
 #define CX3_EP_BULK_VIDEO_PKT_SIZE              (0x400) /* CX3 App video streaming endpoint packet Size */
 
 /* CX3 Application Buffer Parameters*/
-#define CX3_APP_DATA_BUF_SIZE                   (0x5FF0) /* DMA Buffer Data Size Used: 12272 Bytes*/
+#define CX3_APP_DATA_BUF_SIZE                   (0x8FD0) /* DMA Buffer Data Size Used: 12272 Bytes*/
 #define CX3_APP_PROD_HEADER                     (12)     /* CX3 App DMA Buffer Header Size */
 #define CX3_APP_PROD_FOOTER                     (4)      /* CX3 App DMA Buffer Footer Size */
 
@@ -95,7 +95,7 @@
 #define CX3_APP_STREAM_BUF_SIZE                 (CX3_APP_DATA_BUF_SIZE + CX3_APP_PROD_HEADER + CX3_APP_PROD_FOOTER)
 
 /* CX3 Application Buffer count */
-#define CX3_APP_STREAM_BUF_COUNT                (4)
+#define CX3_APP_STREAM_BUF_COUNT                (3)
 
 /* Low byte - CX3 Application video streaming endpoint packet size */
 #define CX3_EP_BULK_VIDEO_PKT_SIZE_L            CY_U3P_GET_LSB(CX3_EP_BULK_VIDEO_PKT_SIZE)
@@ -190,6 +190,8 @@ extern const uint8_t glVga60ProbeCtrl[CX3_APP_MAX_PROBE_SETTING];       /* 640*4
 /************************************/
 /* MIPI Configuration parameters */
 /************************************/
+
+#undef STILL_CAPTURE_ENABLE
 
 extern CyU3PMipicsiCfg_t cfgUvc1080p30NoMclk, cfgUvc720p60NoMclk,  cfgUvcVgaNoMclk, cfgUvc5Mp15NoMclk;
 

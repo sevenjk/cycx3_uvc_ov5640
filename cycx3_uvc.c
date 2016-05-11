@@ -45,6 +45,7 @@
 #include "cycx3_uvc.h"
 #include "cyu3mipicsi.h"
 #include "cyu3imagesensor.h"
+#include "cycx3_m10mo.h"
 
 static CyU3PThread cx3AppThread;               /* Application thread used for streaming from the MIPI interface to USB */
 static CyU3PEvent  glCx3Event;                 /* Application Event Group */
@@ -219,7 +220,8 @@ CyCx3AppStart (
     CyCx3_ImageSensor_Wakeup();
     glMipiActive = CyTrue;
 
-    CyCx3_ImageSensor_Trigger_Autofocus();
+//    CyCx3_ImageSensor_Trigger_Autofocus();
+	M10MO_ColorBar_Output();
     return CY_U3P_SUCCESS;
 }
 
@@ -687,13 +689,14 @@ CyCx3AppImageSensorSetVideoResolution(
                     case 0x04:
                         {
                             /* Write VGA Settings */
-                            status = CyU3PMipicsiSetIntfParams (&cfgUvcVgaNoMclk, CyFalse);
+                            status = CyU3PMipicsiSetIntfParams (&cfgUvcVgaNoMclk, CyTrue);
                             if (status != CY_U3P_SUCCESS)
                             {
                                 CyU3PDebugPrint (4, "\n\rUSBStpCB:SetIntfParams HS Err = 0x%x", status);
                             }
-                            
-                            CyCx3_ImageSensor_Set_Vga();
+                            CyU3PDebugPrint (4, "\n\rEnter set vga", status);
+//                            CyCx3_ImageSensor_Set_Vga();
+        					CyCx3_M10MO_Set_UYVY_VGA_USB3 ();
                         }
                         break;
                 }
@@ -730,7 +733,7 @@ CyCx3AppImageSensorSetVideoResolution(
                     CyU3PDebugPrint (4, "\n\rUSBStpCB:SetIntfParams FS Err = 0x%x", status);
                 }
                 
-                CyCx3_ImageSensor_Set_Vga();
+                CyCx3_M10MO_Set_UYVY_VGA_USB3();
             }
             break;
     }
@@ -1078,6 +1081,26 @@ CyCx3AppUSBSetupCB (
         }
     }
 
+#define WEIZ_TEST	(1)
+#ifdef WEIZ_TEST
+	/* Handle supported vendor requests. */
+	if (bType == CY_U3P_USB_VENDOR_RQT) {
+		isHandled = CyTrue;
+		switch (bRequest) {
+		case 0xE0:
+			CyU3PUsbAckSetup();
+			CyU3PDeviceReset(CyFalse);
+			break;
+
+		default:
+			/* This is unknown request. */
+			isHandled = CyFalse;
+			break;
+		}
+	}
+#endif
+
+
     return isHandled;
 }
 
@@ -1113,6 +1136,14 @@ CyCx3AppInit (
         CyU3PDebugPrint (4, "\n\rAppInit:GPIOInit Err = 0x%x",status);
         CyCx3AppErrorHandler(status);
     }
+
+	 status = CyCx3_M10MO_PowerOn();
+	 if (status != 0)
+	 {
+		 /* Error Handling */
+		 CyU3PDebugPrint (4, "AppInit:M10MO power on failed, error code = %d\n", status);
+		 CyCx3AppErrorHandler(status);
+	 }
 
     /* Initialize the PIB block */
     status = CyU3PMipicsiInitializePIB ();
@@ -1408,8 +1439,16 @@ CyCx3AppInit (
 
     /* Setup Image Sensor */
 
-    CyCx3_ImageSensor_Init();
-    CyCx3_ImageSensor_Sleep();
+    /*Set MIPI PHY Time Delay depending on THS-Prepare and THS-Zero parameters for ISP*/
+    CyU3PMipicsiSetPhyTimeDelay(1,0x09);
+
+//    CyCx3_ImageSensor_Init();
+//    CyCx3_ImageSensor_Sleep();
+    CyU3PMipicsiSetSensorControl (CY_U3P_CSI_IO_XRES, CyTrue);
+    CyU3PMipicsiSetSensorControl (CY_U3P_CSI_IO_XSHUTDOWN, CyTrue);
+
+	CyCx3_M10MO_StartFW();
+
 
 #ifdef RESET_TIMER_ENABLE
     CyU3PTimerCreate (&Cx3ResetTimer, CyCx3AppProgressTimer, 0x00, TIMER_PERIOD, 0, CYU3P_NO_ACTIVATE);
