@@ -1450,6 +1450,7 @@ CyCx3AppInit (
 	CyCx3_M10MO_StartFW();
 
 
+
 #ifdef RESET_TIMER_ENABLE
     CyU3PTimerCreate (&Cx3ResetTimer, CyCx3AppProgressTimer, 0x00, TIMER_PERIOD, 0, CYU3P_NO_ACTIVATE);
 #endif

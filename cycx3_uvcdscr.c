@@ -363,7 +363,7 @@ const uint8_t CyCx3USBSSConfigDscr[] =
     0x04,                               /* Frame Descriptor Index: 4 */
     0x00,                               /* No Still image capture supported */
     0x80, 0x02,                         /* Width in pixel:  640 */
-    0xE0, 0x01,                         /* Height in pixel: 480 */
+    0xF0, 0x00,                         /* Height in pixel: 480 */
     0x00, 0x00, 0x94, 0x11,             /* Min bit rate (bits/s): 640 x 480 x 2 x 60 x 8 = 294912000 */
     0x00, 0x00, 0x94, 0x11,             /* Max bit rate (bits/s): Fixed rate so same as Min  */
     0x00, 0x60, 0x09, 0x00,             /* Maximum video or still frame size in bytes(Deprecated): 640 x 480 x 2*/
